@@ -29,6 +29,12 @@ public class ItemCatController {
             return ResponseEntity.ok(itemCats);
 
         } catch (Exception e) {
+
+
+
+
+
+
             e.printStackTrace();
         }
 
