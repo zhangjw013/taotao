@@ -19,6 +19,7 @@ public class ItemCatController {
     @Autowired
     private ItemCatService itemCatService;
 
+
     @RequestMapping(value = "/query/{page}")
     public ResponseEntity<List<ItemCat>> queryItemCatListByPage
             (@PathVariable("page") Integer page, @RequestParam(value = "rows", defaultValue = "10") Integer rows) {
