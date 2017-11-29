@@ -10,19 +10,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ItemCatServiceImpl implements ItemCatService{
+public class ItemCatServiceImpl extends BaseServiceImpl<ItemCat> implements ItemCatService {
 
     @Autowired
     private ItemCatMapper itemCatMapper;
 
     @Override
-    public List<ItemCat> queryItemCatListByPage(Integer page, Integer rows) {
-
+    public List<ItemCat> queryItemCatListByPage(Integer pageNo, Integer rows) {
         //设置分页
-        PageHelper.startPage(page,rows);
+        PageHelper.startPage(pageNo, rows);
 
-        List<ItemCat> list = itemCatMapper.selectAll();
-
-        return list;
+        return itemCatMapper.selectAll();
     }
 }

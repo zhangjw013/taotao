@@ -111,43 +111,55 @@
 		$('#itemAddForm').form('reset');
 		itemAddEditor.html('');
 	}
-	
-	//类目选择初始化
-	function initItemCat(){
-		var selectItemCat = $(".selectItemCat");
-   		selectItemCat.click(function(){
-   			$("<div>").css({padding:"5px"}).html("<ul>")
-   			.window({
-   				width:'500',
-   			    height:"450",
-   			    modal:true,
-   			    closed:true,
-   			    iconCls:'icon-save',
-   			    title:'选择类目',
-   			    onOpen : function(){
-   			    	var _win = this;
-   			    	$("ul",_win).tree({
-   			    		url:'/rest/item/cat',
-   			    		method:'GET',
-   			    		animate:true,
-   			    		onClick : function(node){
-   			    			if($(this).tree("isLeaf",node.target)){
-   			    				// 填写到cid中
-   			    				selectItemCat.parent().find("[name=cid]").val(node.id);
-   			    				selectItemCat.next().text(node.text);
-   			    				$(_win).window('close');
-   			    			}
-   			    		}
-   			    	});
-   			    },
-   			    onClose : function(){
-   			    	$(this).window("destroy");
-   			    }
-   			}).window('open');
-   		});
+
+    //类目选择初始化
+    function initItemCat(){
+        //获取class为selectItemCat的元素，其实就是类目选择按钮；可以使用ctrl+k页面中查找selectItemCat在哪里也存在，进而找到类名
+        var selectItemCat = $(".selectItemCat");
+        //给类目选择按钮增加点击事件
+        selectItemCat.click(function(){
+            //添加div标签，并设置css属性
+            //在div标签里面添加ul标签，并打开窗口
+            $("<div>").css({padding:"5px"}).html("<ul>")
+                .window({
+                    //窗口创建属性
+                    width:'500',
+                    height:"450",
+                    modal:true,
+                    closed:true,
+                    iconCls:'icon-save',
+                    title:'选择类目',
+                    //当窗口打开后执行的逻辑
+                    onOpen : function(){
+                        //这里的this是打开的窗口
+                        var _win = this;
+                        //在窗口范围内，搜索ul标签
+                        //找到ul标签，并创建EasyUI树
+                        $("ul",_win).tree({
+                            //发起请求，创建树
+                            url:'/rest/item/cat',
+                            method:'GET',
+                            animate:true,
+                            //给树上的所有节点添加点击事件
+                            onClick : function(node){
+                                if($(this).tree("isLeaf",node.target)){
+                                    // 填写到cid中
+                                    selectItemCat.parent().find("[name=cid]").val(node.id);
+                                    selectItemCat.next().text(node.text);
+                                    $(_win).window('close');
+                                }
+                            }
+                        });
+                    },
+                    onClose : function(){
+                        $(this).window("destroy");
+                    }
+                }).window('open');
+        });
     }
-	
-	//图片上传初始化
+
+
+    //图片上传初始化
 	function initPicUpload(){
        	$(".picFileUpload").click(function(){
        		var form = $('#itemAddForm');
