@@ -10,7 +10,7 @@
 	            <td>
 	            	<a href="javascript:void(0)" class="easyui-linkbutton selectItemCat">选择类目</a>
 	            	<span ></span>
-	            	<input type="hidden" name="cid" style="width: 280px;"></input>
+	            	<input type="hidden" name="cid" style="width: 280px;" data-options="required:true"></input>
 	            </td>
 	        </tr>
 	        <tr>
