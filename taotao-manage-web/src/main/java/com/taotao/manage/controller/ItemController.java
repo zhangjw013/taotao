@@ -60,19 +60,52 @@ public class ItemController {
 
     }
 
+    /**
+     * 更改商品状态  删除
+     * @param ids
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public void deleteItem(@RequestParam(value = "ids", required = false) Integer[] params) {
+    public void deleteItem(@RequestParam(value = "ids", required = false) Integer[] ids) {
 
         try {
-            itemService.deleteItem(params);
+            itemService.deleteItem(ids);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * 更改商品状态  下架
+     * @param ids
+     */
+    @RequestMapping(value = "/instock", method = RequestMethod.POST)
+    @ResponseBody
+    public void instockItem(@RequestParam(value = "ids", required = false) Integer[] ids) {
 
+        try {
+            itemService.instockItem(ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 更改商品状态 上架
+     * @param ids
+     */
+    @RequestMapping(value = "/reshelf", method = RequestMethod.POST)
+    @ResponseBody
+    public void reshelfItem(@RequestParam(value = "ids", required = false) Integer[] ids) {
+
+        try {
+            itemService.reshelfItem(ids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 根据商品标题分页查询商品
@@ -96,4 +129,6 @@ public class ItemController {
         //返回500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+
+
 }

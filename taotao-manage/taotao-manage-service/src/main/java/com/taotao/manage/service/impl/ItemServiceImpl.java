@@ -74,17 +74,65 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
 
     }
 
+    /**
+     * 更改商品状态  删除
+     *
+     * @param ids
+     */
     @Override
     public void deleteItem(Serializable[] ids) {
-        deleteByIds(ids);
-
-        ItemDesc itemDesc = new ItemDesc();
-        for (Serializable id : ids){
-            itemDesc.setItemId(Long.parseLong(id.toString()));
-            itemDescMapper.deleteByPrimaryKey(itemDesc);
+//        deleteByIds(ids);
+//
+//        ItemDesc itemDesc = new ItemDesc();
+//        for (Serializable id : ids){
+//            itemDesc.setItemId(Long.parseLong(id.toString()));
+//            itemDescMapper.deleteByPrimaryKey(itemDesc);
+//        }
+        //更新商品状态为删除
+        Item item = new Item();
+        for (Serializable id : ids) {
+            item.setId(Long.parseLong(id.toString()));
+            item.setStatus(3);
+            item.setUpdated(new Date());
+            updateSelective(item);
         }
 
     }
+
+    /**
+     * 更改商品状态   下架
+     *
+     * @param ids
+     */
+    @Override
+    public void instockItem(Serializable[] ids) {
+        //更新商品状态为下架
+        Item item = new Item();
+        for (Serializable id : ids) {
+            item.setId(Long.parseLong(id.toString()));
+            item.setStatus(2);
+            item.setUpdated(new Date());
+            updateSelective(item);
+        }
+    }
+
+    /**
+     * 更改商品状态   上架
+     *
+     * @param ids
+     */
+    @Override
+    public void reshelfItem(Serializable[] ids) {
+        //更新商品状态为上架
+        Item item = new Item();
+        for (Serializable id : ids) {
+            item.setId(Long.parseLong(id.toString()));
+            item.setStatus(1);
+            item.setUpdated(new Date());
+            updateSelective(item);
+        }
+    }
+
 
     @Override
     public DataGridResult queryItemList(String title, Integer page, Integer rows) {

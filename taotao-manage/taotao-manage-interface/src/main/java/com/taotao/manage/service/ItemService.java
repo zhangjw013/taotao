@@ -11,7 +11,14 @@ public interface ItemService extends BaseService<Item> {
 
     void updateItem(Item item, String Dese);
 
+    //更改删除状态
     void deleteItem(Serializable[] ids);
+
+    //更改下架状态
+    void instockItem(Serializable[] ids);
+
+    //更改上架状态
+    void reshelfItem(Serializable[] ids);
 
     DataGridResult queryItemList(String title, Integer page, Integer rows);
 

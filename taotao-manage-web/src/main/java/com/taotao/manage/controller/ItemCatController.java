@@ -1,6 +1,8 @@
 package com.taotao.manage.controller;
 
+import com.taotao.manage.pojo.Item;
 import com.taotao.manage.pojo.ItemCat;
+import com.taotao.manage.pojo.ItemDesc;
 import com.taotao.manage.service.ItemCatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,6 +68,23 @@ public class ItemCatController {
         }
 
         //返回500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+
+    /**
+     * 根据商品Id查询商品目录
+     * @param itemCatId
+     * @return
+     */
+    @RequestMapping(value = "/{itemCatId}", method = RequestMethod.GET)
+    public ResponseEntity<ItemCat> queryItemDescByItemId(@PathVariable("itemCatId") Long itemCatId) {
+
+        try {
+            ItemCat itemCat = itemCatService.queryById(itemCatId);
+            return ResponseEntity.ok(itemCat);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 }
