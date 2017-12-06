@@ -22,12 +22,31 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!-- 解决RESTful put请求时，获取不了表单提交的数据问题 -->
+  <filter>
+    <filter-name>httpPutFormContentFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>httpPutFormContentFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- 解决RESTful delete请求时，获取不了表单提交的数据问题 ；可以通过post并携带一个_method=delete的参数模拟delete请求-->
+  <filter>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>hiddenHttpMethodFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <servlet>
     <servlet-name>taotao-manage-web</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring/taotao-manage-web-servlet.xml</param-value>
+      <param-value>classpath:spring/*.xml</param-value>
     </init-param>
     <!-- tomcat启动时完成初始化；若不配置则在第一次请求后完成初始化 -->
     <load-on-startup>1</load-on-startup>

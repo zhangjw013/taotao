@@ -1,14 +1,23 @@
 package com.taotao.manage.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.taotao.common.vo.DataGridResult;
 import com.taotao.manage.mapper.ItemDescMapper;
 import com.taotao.manage.mapper.ItemMapper;
 import com.taotao.manage.pojo.Item;
 import com.taotao.manage.pojo.ItemDesc;
 import com.taotao.manage.service.ItemService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
+import java.io.Serializable;
+import java.net.URLClassLoader;
+import java.net.URLDecoder;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemService {
@@ -21,6 +30,7 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
 
     /**
      * 保存商品信息
+     *
      * @param item
      * @param Dese
      * @return
@@ -45,6 +55,7 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
 
     /**
      * 更新商品信息
+     *
      * @param item
      * @param Dese
      */
@@ -61,5 +72,45 @@ public class ItemServiceImpl extends BaseServiceImpl<Item> implements ItemServic
         itemDesc.setUpdated(new Date());
         itemDescMapper.updateByPrimaryKeySelective(itemDesc);
 
+    }
+
+    @Override
+    public void deleteItem(Serializable[] ids) {
+        deleteByIds(ids);
+
+        ItemDesc itemDesc = new ItemDesc();
+        for (Serializable id : ids){
+            itemDesc.setItemId(Long.parseLong(id.toString()));
+            itemDescMapper.deleteByPrimaryKey(itemDesc);
+        }
+
+    }
+
+    @Override
+    public DataGridResult queryItemList(String title, Integer page, Integer rows) {
+
+        //创建Example
+        Example example = new Example(Item.class);
+        try {
+            if (StringUtils.isNoneBlank(title)) {
+                //添加查询条件
+                Example.Criteria criteria = example.createCriteria();
+                //解码
+                title = URLDecoder.decode(title, "utf-8");
+                criteria.andLike("title", "%" + title + "%");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //根据更新时间降序排序
+        example.orderBy("updated").desc();
+        //设置分页信息
+        PageHelper.startPage(page, rows);
+        //执行查询
+        List<Item> list = itemMapper.selectByExample(example);
+        //转换为分页信息对象
+        PageInfo<Item> pageInfo = new PageInfo<>(list);
+        //返回DataGridResult
+        return new DataGridResult(pageInfo.getTotal(), pageInfo.getList());
     }
 }
